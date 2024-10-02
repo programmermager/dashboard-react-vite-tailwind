@@ -19,6 +19,7 @@ specifiers:
   prettier-plugin-tailwindcss: ^0.6.8
   react: ^18.3.1
   react-dom: ^18.3.1
+  react-hook-form: ^7.53.0
   react-router-dom: ^6.26.2
   sonner: ^1.5.0
   tailwind-merge: ^2.5.2
@@ -33,6 +34,7 @@ dependencies:
   postcss: 8.4.47
   react: 18.3.1
   react-dom: 18.3.1_react@18.3.1
+  react-hook-form: 7.53.0_react@18.3.1
   react-router-dom: 6.26.2_nnrd3gsncyragczmpvfhocinkq
   sonner: 1.5.0_nnrd3gsncyragczmpvfhocinkq
   tailwind-merge: 2.5.2
@@ -2550,6 +2552,15 @@ packages:
       loose-envify: 1.4.0
       react: 18.3.1
       scheduler: 0.23.2
+    dev: false
+
+  /react-hook-form/7.53.0_react@18.3.1:
+    resolution: {integrity: sha512-M1n3HhqCww6S2hxLxciEXy2oISPnAzxY7gvwVPrtlczTM/1dDadXgUxDpHMrMTblDOcm/AXtXxHwZ3jpg1mqKQ==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      react: ^16.8.0 || ^17 || ^18 || ^19
+    dependencies:
+      react: 18.3.1
     dev: false
 
   /react-is/16.13.1:
