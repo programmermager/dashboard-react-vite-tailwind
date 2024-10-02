@@ -1,6 +1,6 @@
 import { cn } from "../lib/helper/utils";
 
-function Button({ text, onClick, className, disabled, isLoading }) {
+function Button({ type, text, onClick, className, disabled, isLoading }) {
   if (isLoading) {
     return (
       <center>
@@ -14,6 +14,7 @@ function Button({ text, onClick, className, disabled, isLoading }) {
   return (
     <div>
       <button
+        type={type}
         onClick={disabled ? null : onClick}
         className={cn(
           `w-full rounded-lg ${disabled ? "bg-slate-400" : "bg-primary"} p-3 text-sm text-white`,

@@ -1,10 +1,10 @@
 import { Toaster } from "sonner";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import GuardProtectedRoute from "./components/guard-protected-route";
-import LoginPage from "./pages/login-page/login-page";
+import GuardProtectedRoute from "./components/GuardProtectedRoute";
+import LoginPage from "./pages/login/LoginPage";
 import "./App.css";
-import ProtectedRoute from "./components/protected-route";
-import Admin from "./pages/admin/admin";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Admin from "./pages/admin/AdminPage";
 
 function App() {
   return (

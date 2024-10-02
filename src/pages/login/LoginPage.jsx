@@ -1,6 +1,7 @@
 import { useState } from "react";
-import FormLogin from "./components/form-login";
-import { Logo } from "../../components/logo";
+import { FormLogin } from "./components/FormLogin";
+import { Logo } from "../../components/Logo";
+import { FormRegister } from "./components/FormRegister";
 
 export const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -16,24 +17,30 @@ export const LoginPage = () => {
               <p className="text-lg font-bold">Forever </p>
             </div>
           </div>
-          <p className="mt-5 text-xl font-bold">Masuk</p>
+          <p className="mt-5 text-xl font-bold">
+            {isLogin ? `Masuk` : `Registrasi`}
+          </p>
           <div className="flex flex-row">
-            <p className="text-sm">
+            <p className="text-left text-xs md:text-sm">
               {isLogin
                 ? `Belum punya akun Wakanda Forever?`
                 : `Sudah punya akun Wakanda Forever?`}{" "}
             </p>
             <p
               onClick={() => setIsLogin(!isLogin)}
-              className="ml-1 text-sm font-bold text-blue-800"
+              className="ml-1 text-left text-xs font-bold text-blue-800 md:text-sm"
             >
               {isLogin ? `Registrasi Disini` : `Login Disini`}
             </p>
           </div>
           <hr className="mt-2" />
 
-          <FormLogin isRegister={!isLogin} />
-          <Footer />
+          {isLogin ? (
+            <FormLogin />
+          ) : (
+            <FormRegister onSuccessRegister={() => setIsLogin(true)} />
+          )}
+          <Footer isLogin={isLogin} />
         </div>
         <img
           alt=""
@@ -47,11 +54,11 @@ export const LoginPage = () => {
 
 export default LoginPage;
 
-export const Footer = () => {
+export const Footer = ({ isLogin }) => {
   return (
     <div className="flex flex-col">
       <p className="mt-2 text-center">
-        Dengan menekan tombol masuk, Anda telah menyetujui
+        {`Dengan menekan tombol ${isLogin ? `Masuk` : `Registrasi`}, Anda telah menyetujui`}
       </p>
       <div className="flex flex-row justify-center">
         <a
