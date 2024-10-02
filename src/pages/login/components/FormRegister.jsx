@@ -4,10 +4,9 @@ import { supabase } from "../../../lib/helper/supabase-client";
 import { toast } from "sonner";
 import { Input } from "../../../components/Input";
 import { useForm } from "react-hook-form";
+import Validators from "../../../lib/helper/validators";
 
 export const FormRegister = ({ onSuccessRegister }) => {
-  const [isLoading, setLoading] = useState(false);
-
   const {
     register,
     formState: { errors },
@@ -15,6 +14,9 @@ export const FormRegister = ({ onSuccessRegister }) => {
   } = useForm({
     criteriaMode: "all",
   });
+
+  const [isLoading, setLoading] = useState(false);
+  const [password, setPassword] = useState("");
 
   const onSubmit = (data) => {
     signUpNewUser(data);
@@ -43,14 +45,16 @@ export const FormRegister = ({ onSuccessRegister }) => {
           email: data.user.email,
           name: body["name"],
         });
-        console.log(`data user => ${data}`);
+
         toast.success(
-          `Anda berhasil registrasi, silahkan verifikasi akun anda melalui email`,
+          "Anda berhasil registrasi, silahkan verifikasi akun anda melalui email",
         );
         onSuccessRegister();
       }
     } else {
-      toast.error(`User sudah terdaftar, silahkan gunakan email lain`);
+      toast.error(
+        `Email ${body["email"]} sudah terdaftar, silahkan gunakan email lain`,
+      );
     }
 
     setLoading(false);
@@ -73,11 +77,7 @@ export const FormRegister = ({ onSuccessRegister }) => {
       <Input
         register={register}
         rules={{
-          required: "Email tidak boleh kosong",
-          pattern: {
-            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-            message: "Email yang anda masukkan tidak valid",
-          },
+          ...Validators.email(),
         }}
         error={errors.email?.message}
         name="email"
@@ -89,17 +89,34 @@ export const FormRegister = ({ onSuccessRegister }) => {
       <Input
         register={register}
         rules={{
-          required: "Kata Sandi tidak boleh kosong",
-          minLength: {
-            value: 8,
-            message: "Minimal 8 Karakter",
-          },
+          ...Validators.password(),
         }}
         error={errors.password?.message}
         name="password"
         label="Kata Sandi"
         className="mt-5"
         placeholder="Masukkan Kata Sandi"
+        type="password"
+        onInput={(e) => {
+          setPassword(e.target.value);
+        }}
+      />
+      <Input
+        register={register}
+        rules={{
+          required: "Kata Sandi tidak boleh kosong",
+          minLength: {
+            value: 8,
+            message: "Minimal 8 Karakter",
+          },
+          validate: (value) =>
+            value === password || "The passwords do not match",
+        }}
+        error={errors.confirm_password?.message}
+        name="confirm_password"
+        label="Konfirmasi Kata Sandi"
+        className="mt-5"
+        placeholder="Masukkan Konfirmasi Kata Sandi"
         type="password"
       />
 

@@ -34,19 +34,6 @@ export const Input = ({
           {error}
         </span>
       )}
-      {/* {errors && <p>{errors}</p>} */}
-      {/* <Controller
-        errors={errors}
-        name="multipleErrorInput"
-        render={({ messages }) => {
-          console.log("messages", messages);
-          return messages
-            ? Object.entries(messages).map(([type, message]) => (
-                <p key={type}>{message}</p>
-              ))
-            : null;
-        }}
-      /> */}
     </div>
   );
 };

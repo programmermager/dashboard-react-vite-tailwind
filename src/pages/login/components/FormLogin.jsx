@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import { Input } from "../../../components/Input";
 import { useForm } from "react-hook-form";
+import Validators from "../../../lib/helper/validators";
 
 export const FormLogin = () => {
   const [isLoading, setLoading] = useState(false);
@@ -44,11 +45,7 @@ export const FormLogin = () => {
       <Input
         register={register}
         rules={{
-          required: "Email tidak boleh kosong",
-          pattern: {
-            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-            message: "Email yang anda masukkan tidak valid",
-          },
+          ...Validators.email(),
         }}
         name="email"
         error={errors.email?.message}
@@ -60,7 +57,7 @@ export const FormLogin = () => {
       <Input
         register={register}
         rules={{
-          required: "Kata Sandi Tidak boleh kosong",
+          ...Validators.password(),
         }}
         name="password"
         error={errors.password?.message}
