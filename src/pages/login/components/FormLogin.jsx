@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Input } from "../../../components/Input";
 import { useForm } from "react-hook-form";
 import Validators from "../../../lib/helper/validators";
+import { FormName } from "../../../lib/helper/form-name";
 
 export const FormLogin = () => {
   const [isLoading, setLoading] = useState(false);
@@ -35,6 +36,7 @@ export const FormLogin = () => {
       toast.error(`${error.message}`);
     } else {
       localStorage.setItem("token", data.session.access_token);
+      localStorage.setItem("user", JSON.stringify(data.session.user));
       toast.success(`Anda berhasil login`);
       navigate("/", { replace: true });
     }
@@ -47,7 +49,7 @@ export const FormLogin = () => {
         rules={{
           ...Validators.email(),
         }}
-        name="email"
+        name={FormName.EMAIL}
         error={errors.email?.message}
         className="mt-5"
         label="Email"
@@ -59,7 +61,7 @@ export const FormLogin = () => {
         rules={{
           ...Validators.password(),
         }}
-        name="password"
+        name={FormName.PASSWORD}
         error={errors.password?.message}
         label="Kata Sandi"
         className="mt-5"

@@ -3,19 +3,29 @@ import { Users, ChevronDown } from "lucide-react";
 import { Logo } from "../../components/Logo";
 import { replace, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useEffect } from "react";
 
 function Admin() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState({});
 
   const toggleDropdown = () => setIsOpen(!isOpen);
   const navigate = useNavigate();
 
   function logout() {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     navigate("/login", replace);
     toast.success("Berhasil Logout");
   }
+
+  useEffect(() => {
+    const userStr = localStorage.getItem("user");
+    const userr = JSON.parse(userStr);
+    console.log(`${typeof userr} -- ${userr.id}`);
+    setUser(userr);
+  }, []);
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-gray-100">
@@ -37,7 +47,7 @@ function Admin() {
               aria-expanded="true"
               onClick={toggleDropdown}
             >
-              Hello
+              Hello {user.email}
               <ChevronDown className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
             </button>
           </div>

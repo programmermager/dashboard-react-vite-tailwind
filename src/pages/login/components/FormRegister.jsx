@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Input } from "../../../components/Input";
 import { useForm } from "react-hook-form";
 import Validators from "../../../lib/helper/validators";
+import { FormName } from "../../../lib/helper/form-name";
 
 export const FormRegister = ({ onSuccessRegister }) => {
   const {
@@ -44,6 +45,7 @@ export const FormRegister = ({ onSuccessRegister }) => {
         await supabase.from("users").insert({
           email: data.user.email,
           name: body["name"],
+          auth_uid: data.user.id,
         });
 
         toast.success(
@@ -68,7 +70,7 @@ export const FormRegister = ({ onSuccessRegister }) => {
           required: "Nama tidak boleh kosong",
         }}
         error={errors.name?.message}
-        name="name"
+        name={FormName.NAME}
         className="mt-5"
         label="Nama Lengkap"
         placeholder="Masukkan Nama Lengkap"
@@ -80,7 +82,7 @@ export const FormRegister = ({ onSuccessRegister }) => {
           ...Validators.email(),
         }}
         error={errors.email?.message}
-        name="email"
+        name={FormName.EMAIL}
         className="mt-5"
         label="Email"
         placeholder="Masukkan Email"
@@ -92,7 +94,7 @@ export const FormRegister = ({ onSuccessRegister }) => {
           ...Validators.password(),
         }}
         error={errors.password?.message}
-        name="password"
+        name={FormName.PASSWORD}
         label="Kata Sandi"
         className="mt-5"
         placeholder="Masukkan Kata Sandi"
@@ -109,8 +111,7 @@ export const FormRegister = ({ onSuccessRegister }) => {
             value: 8,
             message: "Minimal 8 Karakter",
           },
-          validate: (value) =>
-            value === password || "The passwords do not match",
+          validate: (value) => value === password || "Kata Sandi tidak sama",
         }}
         error={errors.confirm_password?.message}
         name="confirm_password"
