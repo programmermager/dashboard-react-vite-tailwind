@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Users, ChevronDown } from "lucide-react";
-import { Logo } from "../../components/logo";
+import { Logo } from "../../components/Logo";
 import { replace, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useEffect } from "react";
