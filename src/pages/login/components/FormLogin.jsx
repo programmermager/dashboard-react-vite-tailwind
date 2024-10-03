@@ -51,7 +51,6 @@ export const FormLogin = () => {
     } else {
       localStorage.setItem("token", data.session.access_token);
       localStorage.setItem("user", JSON.stringify(data.user));
-      console.log(`${JSON.stringify(data.user)}`);
       toast.success(`Anda berhasil login`);
       navigate("/", { replace: true });
     }
