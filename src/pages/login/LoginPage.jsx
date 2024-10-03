@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FormLogin } from "./components/FormLogin";
-import { Logo } from "../../components/Logo";
+import { Logo } from "../../components/logo";
 import { FormRegister } from "./components/FormRegister";
 
 export const LoginPage = () => {
