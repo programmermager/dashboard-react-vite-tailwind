@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Button from "../../../components/Button";
-import { supabase } from "../../../lib/helper/supabase-client";
+import { supabase, SupabaseRpc } from "../../../lib/helper/supabase-client";
 import { toast } from "sonner";
 import { Input } from "../../../components/Input";
 import { useForm } from "react-hook-form";
@@ -24,32 +24,33 @@ export const FormRegister = ({ onSuccessRegister }) => {
   };
 
   async function checkUser(email) {
-    const { data } = await supabase.rpc("check_email_exists", {
+    const { data } = await supabase.rpc(SupabaseRpc.checkEmail, {
       email_input: email,
     });
     return data;
   }
 
   async function signUpNewUser(body) {
-    setLoading(true);
+    setLoading(!isLoading);
     const isExist = await checkUser(body["email"]);
     if (!isExist) {
       const { data, error } = await supabase.auth.signUp({
         email: body["email"],
         password: body["password"],
+        options: {
+          data: {
+            name: body["name"],
+            role: "user",
+            image: `https://avatar.iran.liara.run/username?username=${body["name"]}`,
+          },
+        },
       });
 
       if (error) {
         toast.error(`${error.message}`);
       } else {
-        await supabase.from("users").insert({
-          email: data.user.email,
-          name: body["name"],
-          auth_uid: data.user.id,
-        });
-
         toast.success(
-          "Anda berhasil registrasi, silahkan verifikasi akun anda melalui email",
+          `Anda berhasil registrasi, silahkan verifikasi akun anda melalui email ${data.user.email}`,
         );
         onSuccessRegister();
       }
@@ -59,7 +60,7 @@ export const FormRegister = ({ onSuccessRegister }) => {
       );
     }
 
-    setLoading(false);
+    setLoading(!isLoading);
   }
 
   return (
@@ -116,18 +117,11 @@ export const FormRegister = ({ onSuccessRegister }) => {
         error={errors.confirm_password?.message}
         name="confirm_password"
         label="Konfirmasi Kata Sandi"
-        className="mt-5"
+        className="my-5"
         placeholder="Masukkan Konfirmasi Kata Sandi"
         type="password"
       />
 
-      <div className="my-5 flex w-full flex-row justify-between">
-        <div className="flex flex-row items-center">
-          <input type="checkbox" name="remember" id="" className="mr-2" />
-          <p className="text-sm font-bold text-primary">Ingat Saya</p>
-        </div>
-        <p className="text-sm font-bold text-primary">Lupa Password</p>
-      </div>
       <Button type="submit" isLoading={isLoading} text="Registrasi" />
     </form>
   );

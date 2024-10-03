@@ -24,19 +24,34 @@ export const FormLogin = () => {
     signInWithEmail(data);
   };
 
+  const onResend = (data) => {
+    resendEmail(data);
+  };
+
+  async function resendEmail(data) {
+    setLoading(!isLoading);
+    const { error } = await supabase.auth.resend({
+      type: "signup",
+      email: data["email"],
+    });
+    console.log(error);
+    setLoading(!isLoading);
+  }
+
   async function signInWithEmail(body) {
-    setLoading(true);
+    setLoading(!isLoading);
     const { data, error } = await supabase.auth.signInWithPassword({
       email: body["email"],
       password: body["password"],
     });
-    setLoading(false);
+    setLoading(!isLoading);
 
     if (error) {
       toast.error(`${error.message}`);
     } else {
       localStorage.setItem("token", data.session.access_token);
-      localStorage.setItem("user", JSON.stringify(data.session.user));
+      localStorage.setItem("user", JSON.stringify(data.user));
+      console.log(`${JSON.stringify(data.user)}`);
       toast.success(`Anda berhasil login`);
       navigate("/", { replace: true });
     }
@@ -74,7 +89,12 @@ export const FormLogin = () => {
           <input type="checkbox" name="remember" id="" className="mr-2" />
           <p className="text-sm font-bold text-primary">Ingat Saya</p>
         </div>
-        <p className="text-sm font-bold text-primary">Lupa Password</p>
+        <p
+          className="cursor-pointer text-sm font-bold text-primary"
+          onClick={handleSubmit(onResend)}
+        >
+          Lupa Password
+        </p>
       </div>
       <Button type="submit" isLoading={isLoading} text="Masuk" />
     </form>

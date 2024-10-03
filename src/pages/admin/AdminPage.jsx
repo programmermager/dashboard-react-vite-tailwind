@@ -4,6 +4,8 @@ import { Logo } from "../../components/Logo";
 import { replace, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useEffect } from "react";
+import { Pencil } from "lucide-react";
+import { Trash } from "lucide-react";
 
 function Admin() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -20,11 +22,14 @@ function Admin() {
     toast.success("Berhasil Logout");
   }
 
-  useEffect(() => {
+  async function getLocalUser() {
     const userStr = localStorage.getItem("user");
     const userr = JSON.parse(userStr);
-    console.log(`${typeof userr} -- ${userr.id}`);
     setUser(userr);
+  }
+
+  useEffect(() => {
+    getLocalUser();
   }, []);
 
   return (
@@ -38,7 +43,7 @@ function Admin() {
         </div>
 
         <div className="relative inline-block text-left">
-          <div>
+          <div className="flex">
             <button
               type="button"
               className="inline-flex justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50"
@@ -47,7 +52,7 @@ function Admin() {
               aria-expanded="true"
               onClick={toggleDropdown}
             >
-              Hello {user.email}
+              Halo {user.email}
               <ChevronDown className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
             </button>
           </div>
@@ -99,52 +104,57 @@ function Admin() {
           <nav className="flex h-full flex-col pt-16">
             <button className="mt-1 flex items-center bg-white text-black hover:bg-slate-300">
               <Users className="mr-2 h-4 w-4" />
-              Heroes
+              Users
             </button>
           </nav>
         </aside>
 
         {/* Main Content */}
-        <main className="left-0 right-0 ml-0 flex w-full flex-col items-start p-4 lg:ml-64">
+        <main className="left-0 right-0 ml-0 flex w-full flex-col items-start p-4 lg:ml-56">
           <div className="w-full rounded-lg border bg-white p-4">
             <h2 className="mb-4 text-left text-2xl font-bold">
               User management
             </h2>
             <hr />
             {/* Scrollable content */}
-            <table className="w-full table-auto border-collapse border border-slate-500">
-              <thead>
-                <tr>
-                  <th>Song</th>
-                  <th>Artist</th>
-                  <th>Year</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td className="border border-slate-700">
-                    The Sliding Mr. Bones (Next Stop, Pottersville)
-                  </td>
-                  <td>Malcolm Lockyer</td>
-                  <td>1961</td>
-                </tr>
-                <tr>
-                  <td>Witchy Woman</td>
-                  <td>The Eagles</td>
-                  <td>1972</td>
-                </tr>
-                <tr>
-                  <td>Shining Star</td>
-                  <td>Earth, Wind, and Fire</td>
-                  <td>1975</td>
-                </tr>
-              </tbody>
-            </table>
-            {/* {Array.from({ length: 20 }).map((_, index) => (
-              <div key={index} className="bg-muted mb-4 rounded-lg p-4">
-                User {index + 1} details
-              </div>
-            ))} */}
+
+            <div className="relative overflow-x-auto">
+              <table className="w-full text-left text-sm text-gray-500 rtl:text-right dark:text-gray-400">
+                <thead className="bg-gray-50 text-xs uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400">
+                  <tr>
+                    <th scope="col" className="px-6 py-3">
+                      Nama Lengkap
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Email
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Dibuat Tanggal
+                    </th>
+                    <th scope="col" className="px-6 py-3">
+                      Aksi
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="border-b bg-white dark:border-gray-700 dark:bg-gray-800">
+                    <th
+                      scope="row"
+                      className="whitespace-nowrap px-6 py-4 font-medium text-gray-900 dark:text-white"
+                    >
+                      Udin
+                    </th>
+                    <td className="px-6 py-4">udin@mamayukero.com</td>
+                    <td className="px-6 py-4">1200 SM</td>
+                    <td className="flex px-6 py-4">
+                      <Pencil className="mr-4 h-8 w-8 cursor-pointer rounded-full bg-white p-2 text-blue-500" />
+
+                      <Trash className="h-8 w-8 cursor-pointer rounded-full bg-white p-2 text-red-500" />
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </main>
       </div>
