@@ -164,14 +164,14 @@ function Admin() {
         <main className="left-0 right-0 ml-0 flex w-full flex-col items-start p-4 lg:ml-56">
           <div className="w-full rounded-lg border bg-white p-4">
             <div className="mb-6 flex justify-between">
-              <h2 className="mb-4 text-left text-2xl font-bold">
+              <h2 className="mb-4 flex text-left text-xl font-bold md:text-2xl">
                 User management
               </h2>
               <button
                 onClick={() => navigate("/admin/add-user")}
-                className="cursor-pointer rounded-md bg-primary px-4 font-bold text-white hover:bg-blue-700"
+                className="cursor-pointer rounded-md bg-primary px-2 font-bold text-white hover:bg-blue-700 md:px-4"
               >
-                Tambah User
+                <span className="text-xs md:text-base">Tambah User</span>
               </button>
             </div>
             <hr />
@@ -245,17 +245,17 @@ function Admin() {
                   ))}
                 </tbody>
               </table>
-              <div className="mt-3 flex items-center justify-between">
-                <DropdownPerPage
-                  onChange={(e) => setPerPage(parseInt(e.target.value))}
-                />
-                <Pagination
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                  onPrev={() => setCurrentPage(currentPage - 1)}
-                  onNext={() => setCurrentPage(currentPage + 1)}
-                />
-              </div>
+            </div>
+            <div className="mt-3 flex flex-col items-center justify-between md:flex-row">
+              <DropdownPerPage
+                onChange={(e) => setPerPage(parseInt(e.target.value))}
+              />
+              <Pagination
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onPrev={() => setCurrentPage(currentPage - 1)}
+                onNext={() => setCurrentPage(currentPage + 1)}
+              />
             </div>
           </div>
         </main>
