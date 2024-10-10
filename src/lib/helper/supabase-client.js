@@ -8,4 +8,5 @@ export const supabase = createClient(
 export const SupabaseRpc = {
   checkEmail: "check_email_exists",
   getUsers: "get_users",
+  deleteUser: "delete_user_by_id",
 };
