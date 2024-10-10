@@ -5,7 +5,7 @@ import { toast } from "sonner";
 
 export const SidebarContext = createContext(false);
 
-export const Header = ({ sidebarOpen, toggleSidebar }) => {
+export const Header = ({ sidebarOpen, toggleSidebar, chooseMenuDropdown }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => setIsOpen(!isOpen);
@@ -67,20 +67,26 @@ export const Header = ({ sidebarOpen, toggleSidebar }) => {
             aria-labelledby="options-menu"
           >
             <div className="py-1" role="none">
-              <a
-                href="#"
+              <div
+                onClick={()=>{
+                  chooseMenuDropdown('edit_profile');
+                  toggleDropdown();
+                }}               
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 role="menuitem"
               >
                 Edit Profile
-              </a>
-              <a
-                href="#"
+              </div>
+              <div
+                onClick={()=> {
+                  chooseMenuDropdown('edit_profile');
+                  toggleDropdown();
+                }}  
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                 role="menuitem"
               >
                 Change Password
-              </a>
+              </div>
             </div>
             <div className="py-1" role="none">
               <a
