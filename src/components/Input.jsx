@@ -3,14 +3,17 @@ import { cn } from "../lib/helper/utils";
 export const Input = ({
   label,
   id,
-  register,
-  name,
+  register = () => ({}),
+  name = "",
   rules,
   type,
   placeholder,
   onInput,
   className,
   error,
+  value,
+  disabled,
+  onChange,
 }) => {
   return (
     <div className={cn(`flex w-full flex-col gap-2`, className)}>
@@ -27,6 +30,9 @@ export const Input = ({
         placeholder={placeholder}
         type={type}
         id={id}
+        onChange={onChange}
+        defaultValue={value}
+        disabled={disabled}
         onInput={onInput}
       />
       {error && (

@@ -25,7 +25,7 @@ export const Sidebar = ({ sidebarOpen, onClick }) => {
         {sideLinks.map(({ name, icon }) => (
           <button
             key={name}
-            className={`mt-1 flex items-center ${active == name ? `bg-primary` : `bg-white`} ${active == name ? `text-white` : `text-black`} hover:bg-slate-300`}
+            className={`mt-1 flex items-center ${active == name ? `bg-primary` : `bg-white`} ${active == name ? `text-white` : `text-black`} hover:bg-slate-300 hover:text-primary`}
             onClick={() => {
               setActive(name);
               onClick(name);

@@ -7,6 +7,7 @@ import { Input } from "../../../components/Input";
 import { useForm } from "react-hook-form";
 import Validators from "../../../lib/helper/validators";
 import { FormName } from "../../../lib/helper/form-name";
+import { getUserById } from "../../../services/services";
 
 export const FormLogin = () => {
   const [isLoading, setLoading] = useState(false);
@@ -29,30 +30,31 @@ export const FormLogin = () => {
   };
 
   async function resendEmail(data) {
-    setLoading(!isLoading);
+    setLoading(true);
     const { error } = await supabase.auth.resend({
       type: "signup",
       email: data["email"],
     });
-    console.log(error);
-    setLoading(!isLoading);
+    console.log(`error resend Email ${error}`);
+    setLoading(false);
   }
 
   async function signInWithEmail(body) {
-    setLoading(!isLoading);
+    setLoading(true);
     const { data, error } = await supabase.auth.signInWithPassword({
       email: body["email"],
       password: body["password"],
     });
-    setLoading(!isLoading);
 
     if (error) {
-      toast.error(`${error.message}`);
+      toast.error(`Oops, ${error.message}`);
+      setLoading(false);
     } else {
+      await getUserById(data.user.id);
       localStorage.setItem("token", data.session.access_token);
-      localStorage.setItem("user", JSON.stringify(data.user));
       toast.success(`Anda berhasil login`);
       navigate("/", { replace: true });
+      setLoading(false);
     }
   }
 
