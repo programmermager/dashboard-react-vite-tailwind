@@ -32,7 +32,7 @@ export const FormRegister = ({ onSuccessRegister }) => {
       toast.error(`${resp.error.message}`);
     } else {
       toast.success(
-        `Anda berhasil registrasi, silahkan verifikasi akun anda melalui email ${body.user.email}`,
+        `Anda berhasil registrasi, silahkan verifikasi akun anda melalui email ${body.email}`,
       );
       onSuccessRegister();
     }

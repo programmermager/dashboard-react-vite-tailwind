@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 import { X } from "lucide-react";
 
 function Modal({ isOpen, onClose, title, children }) {
@@ -51,12 +51,12 @@ function Modal({ isOpen, onClose, title, children }) {
   );
 }
 
-Modal.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  onClose: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
-  children: PropTypes.node.isRequired,
-};
+// Modal.propTypes = {
+//   isOpen: PropTypes.bool.isRequired,
+//   onClose: PropTypes.func.isRequired,
+//   title: PropTypes.string.isRequired,
+//   children: PropTypes.node.isRequired,
+// };
 
 Modal.defaultProps = {
   isOpen: false,

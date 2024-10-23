@@ -26,7 +26,7 @@ export async function uploadAvatar(e, id) {
 
 export async function signUpNewUser({ body }) {
   var img = `https://avatar.iran.liara.run/username?username=${body["name"]}`;
-  if (body.photo[0]) {
+  if (body.photo) {
     const response = await uploadAvatar(body);
 
     if (!response.error) {

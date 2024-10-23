@@ -11,7 +11,7 @@ import Swal from "sweetalert2";
 
 export const SidebarContext = createContext(false);
 
-export const Header = ({ sidebarOpen, toggleSidebar, chooseMenuDropdown }) => {
+export const Header = ({ sidebarOpen, toggleSidebar }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [user, setUser] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
