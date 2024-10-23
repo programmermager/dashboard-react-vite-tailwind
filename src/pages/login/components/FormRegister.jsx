@@ -84,11 +84,7 @@ export const FormRegister = ({ onSuccessRegister }) => {
       <Input
         register={register}
         rules={{
-          required: "Kata Sandi tidak boleh kosong",
-          minLength: {
-            value: 8,
-            message: "Minimal 8 Karakter",
-          },
+          ...Validators.password(),
           validate: (value) => value === password || "Kata Sandi tidak sama",
         }}
         error={errors.confirm_password?.message}
