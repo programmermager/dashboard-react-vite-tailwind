@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { supabase, SupabaseRpc } from "../../../lib/helper/supabase-client";
 import withReactContent from "sweetalert2-react-content";
@@ -9,14 +8,40 @@ import { DropdownPerPage } from "../components/DropdownPerPage";
 import { Pagination } from "../components/Pagination";
 import moment from "moment";
 import { useState } from "react";
+import Modal from "../../../components/modal/ModalDialog";
+import { EditUser } from "./components/EditUser";
+import {
+  getLocalUser,
+  getUserById,
+  signUpNewUser,
+  uploadAvatar,
+} from "../../../services/services";
+import { AddUser } from "./components/AddUser";
 
 export const UserManagement = () => {
   const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [perPage, setPerPage] = useState(10);
   const [totalPages, setTotalPages] = useState(1);
+  const [currentUser, setUser] = useState({});
+  const [activeEditUser, setActiveEditUser] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
-  const navigate = useNavigate();
+  const openModal = ({ user }) => {
+    setIsModalOpen(true);
+    setActiveEditUser(user);
+  };
+  const closeModal = () => setIsModalOpen(false);
+
+  const openAddModal = () => setIsAddModalOpen(true);
+  const closeAddModal = () => setIsAddModalOpen(false);
+
+  useEffect(() => {
+    getLocalUser().then((user) => {
+      setUser(user);
+    });
+  }, []);
 
   async function getUsers() {
     const { data, error } = await supabase.rpc(SupabaseRpc.getUsers, {
@@ -62,6 +87,54 @@ export const UserManagement = () => {
     });
   };
 
+  async function edit(e, uid) {
+    if (e.photo.length === 0) {
+      await updateUser(uid, { name: e.name });
+      return;
+    }
+
+    const response = await uploadAvatar(e);
+
+    if (!response.error) {
+      const { data } = await supabase.storage
+        .from("avatars")
+        .getPublicUrl(response.data.path);
+      console.log(`upload === ${data.publicUrl}`);
+
+      updateUser(uid, { name: e.name, photo_profile: data.publicUrl });
+    } else {
+      toast.error(`Gagal upload avatar: ${response.error.message}`);
+    }
+  }
+
+  async function updateUser(uid, data) {
+    const body = { name: data.name };
+    const bodyAuth = { name: data.name };
+    if (data.photo_profile) {
+      body.photo_profile = data.photo_profile;
+      bodyAuth.image = data.photo_profile;
+    }
+
+    const { error } = await supabase
+      .from("users")
+      .update(body)
+      .eq("auth_uid", uid);
+
+    if (!error) {
+      const { error } = await supabase.auth.updateUser({
+        data: bodyAuth,
+      });
+
+      console.log(`error update auth ${error}`);
+      toast.success(`Berhasil memperbarui data`);
+      await getUsers();
+
+      await getUserById(currentUser.auth_uid);
+    } else {
+      toast.error(`Gagal memperbarui data: ${error.message}`);
+    }
+  }
+
   return (
     <div className="w-full rounded-lg border bg-white p-4">
       <div className="mb-6 flex justify-between">
@@ -69,7 +142,7 @@ export const UserManagement = () => {
           User management
         </h2>
         <button
-          onClick={() => navigate("/admin/add-user")}
+          onClick={openAddModal}
           className="cursor-pointer rounded-md bg-primary px-2 font-bold text-white hover:bg-blue-700 md:px-4"
         >
           <span className="text-xs md:text-base">Tambah User</span>
@@ -131,11 +204,18 @@ export const UserManagement = () => {
                   {moment(user.created_at).format("D MMM YYYY")}
                 </td>
                 <td className="flex px-6 py-4">
-                  <Pencil className="mr-4 h-8 w-8 cursor-pointer rounded-full bg-white p-2 text-blue-500" />
-                  <Trash
-                    className="h-8 w-8 cursor-pointer rounded-full bg-white p-2 text-red-500"
-                    onClick={() => confirmSwal(user.auth_uid)}
+                  <Pencil
+                    className="mr-4 h-8 w-8 cursor-pointer rounded-full bg-white p-2 text-blue-500"
+                    onClick={() => openModal({ user })}
                   />
+                  {currentUser.auth_uid !== user.auth_uid ? (
+                    <Trash
+                      className="h-8 w-8 cursor-pointer rounded-full bg-white p-2 text-red-500"
+                      onClick={() => confirmSwal(user.auth_uid)}
+                    />
+                  ) : (
+                    <div />
+                  )}
                 </td>
               </tr>
             ))}
@@ -153,6 +233,38 @@ export const UserManagement = () => {
           onNext={() => setCurrentPage(currentPage + 1)}
         />
       </div>
+
+      <Modal isOpen={isModalOpen} onClose={closeModal} title="Edit User">
+        <EditUser
+          user={activeEditUser}
+          onClose={closeModal}
+          onSubmit={async (e) => {
+            console.log(e);
+            await edit(e, activeEditUser.auth_uid);
+            closeModal();
+          }}
+        />
+      </Modal>
+
+      <Modal isOpen={isAddModalOpen} onClose={closeAddModal} title="Add User">
+        <AddUser
+          onClose={closeAddModal}
+          onSubmit={async (e) => {
+            console.log(e);
+            const resp = await signUpNewUser({ body: e });
+
+            closeAddModal();
+            if (resp.error) {
+              toast.error(`${resp.error.message}`);
+            } else {
+              toast.success(
+                `Anda berhasil registrasi, silahkan verifikasi akun anda melalui email ${e.email}`,
+              );
+              await getUsers();
+            }
+          }}
+        />
+      </Modal>
     </div>
   );
 };

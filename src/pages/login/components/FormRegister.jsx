@@ -1,11 +1,11 @@
 import { useState } from "react";
 import Button from "../../../components/Button";
-import { supabase, SupabaseRpc } from "../../../lib/helper/supabase-client";
-import { toast } from "sonner";
 import { Input } from "../../../components/Input";
 import { useForm } from "react-hook-form";
 import Validators from "../../../lib/helper/validators";
 import { FormName } from "../../../lib/helper/form-name";
+import { toast } from "sonner";
+import { signUpNewUser } from "../../../services/services";
 
 export const FormRegister = ({ onSuccessRegister }) => {
   const {
@@ -20,47 +20,24 @@ export const FormRegister = ({ onSuccessRegister }) => {
   const [password, setPassword] = useState("");
 
   const onSubmit = (data) => {
-    signUpNewUser(data);
+    signingUp(data);
   };
 
-  async function checkUser(email) {
-    const { data } = await supabase.rpc(SupabaseRpc.checkEmail, {
-      email_input: email,
-    });
-    return data;
-  }
+  async function signingUp(body) {
+    setLoading(true);
 
-  async function signUpNewUser(body) {
-    setLoading(!isLoading);
-    const isExist = await checkUser(body["email"]);
-    if (!isExist) {
-      const { data, error } = await supabase.auth.signUp({
-        email: body["email"],
-        password: body["password"],
-        options: {
-          data: {
-            name: body["name"],
-            role: "user",
-            image: `https://avatar.iran.liara.run/username?username=${body["name"]}`,
-          },
-        },
-      });
+    const resp = await signUpNewUser({ body: body });
 
-      if (error) {
-        toast.error(`${error.message}`);
-      } else {
-        toast.success(
-          `Anda berhasil registrasi, silahkan verifikasi akun anda melalui email ${data.user.email}`,
-        );
-        onSuccessRegister();
-      }
+    if (resp.error) {
+      toast.error(`${resp.error.message}`);
     } else {
-      toast.error(
-        `Email ${body["email"]} sudah terdaftar, silahkan gunakan email lain`,
+      toast.success(
+        `Anda berhasil registrasi, silahkan verifikasi akun anda melalui email ${body.user.email}`,
       );
+      onSuccessRegister();
     }
 
-    setLoading(!isLoading);
+    setLoading(false);
   }
 
   return (
