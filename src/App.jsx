@@ -5,6 +5,7 @@ import LoginPage from "./pages/login/LoginPage";
 import "./App.css";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Admin from "./pages/admin/AdminPage";
+import ForgotPassPage from "./pages/forgot_pass/ForgotPassPage";
 
 function App() {
   return (
@@ -17,6 +18,14 @@ function App() {
             element={
               <GuardProtectedRoute>
                 <LoginPage />
+              </GuardProtectedRoute>
+            }
+          />
+          <Route
+            path="/forgot-pass"
+            element={
+              <GuardProtectedRoute>
+                <ForgotPassPage />
               </GuardProtectedRoute>
             }
           />

@@ -2,9 +2,28 @@ import { useState } from "react";
 import { FormLogin } from "./components/FormLogin";
 import { Logo } from "../../components/Logo";
 import { FormRegister } from "./components/FormRegister";
+import { useEffect } from "react";
+import { supabase } from "../../lib/helper/supabase-client";
 
 export const LoginPage = () => {
   const [isLogin, setIsLogin] = useState(true);
+
+  useEffect(() => {
+    supabase.auth.onAuthStateChange(async (event, session) => {
+      console.log(`event ${event} session ${session}`);
+      if (event == "PASSWORD_RECOVERY") {
+        const newPassword = prompt(
+          "What would you like your new password to be?",
+        );
+        const { data, error } = await supabase.auth.updateUser({
+          password: newPassword,
+        });
+
+        if (data) alert("Password updated successfully!");
+        if (error) alert("There was an error updating your password.");
+      }
+    });
+  }, []);
 
   return (
     <div className="flex min-h-screen justify-center">

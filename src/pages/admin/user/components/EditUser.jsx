@@ -34,6 +34,7 @@ export const EditUser = ({ user, onClose, onSubmit }) => {
         className="mt-5"
         placeholder="Masukkan Kata Sandi"
         type="file"
+        accept="image/*"
         onChange={(e) => {
           setImage(URL.createObjectURL(e.target.files[0]));
         }}

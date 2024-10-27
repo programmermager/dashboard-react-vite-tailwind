@@ -25,20 +25,6 @@ export const FormLogin = () => {
     signInWithEmail(data);
   };
 
-  const onResend = (data) => {
-    resendEmail(data);
-  };
-
-  async function resendEmail(data) {
-    setLoading(true);
-    const { error } = await supabase.auth.resend({
-      type: "signup",
-      email: data["email"],
-    });
-    console.log(`error resend Email ${error}`);
-    setLoading(false);
-  }
-
   async function signInWithEmail(body) {
     setLoading(true);
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -92,7 +78,8 @@ export const FormLogin = () => {
         </div>
         <p
           className="cursor-pointer text-sm font-bold text-primary"
-          onClick={handleSubmit(onResend)}
+          // onClick={handleSubmit(onResend)}
+          onClick={() => navigate("/forgot-pass")}
         >
           Lupa Password
         </p>

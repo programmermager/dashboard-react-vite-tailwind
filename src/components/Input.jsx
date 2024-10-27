@@ -14,6 +14,7 @@ export const Input = ({
   value,
   disabled,
   onChange,
+  accept,
 }) => {
   return (
     <div className={cn(`flex w-full flex-col gap-2`, className)}>
@@ -29,6 +30,7 @@ export const Input = ({
         className="w-full rounded-lg border p-2 text-sm active:border-black"
         placeholder={placeholder}
         type={type}
+        accept={accept}
         id={id}
         onChange={onChange}
         defaultValue={value}

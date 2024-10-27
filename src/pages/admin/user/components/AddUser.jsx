@@ -29,6 +29,7 @@ export const AddUser = ({ onClose, onSubmit }) => {
         <Input
           register={register}
           name={FormName.PHOTO}
+          accept="image/*"
           label="Foto Profil"
           className="mt-5"
           type="file"
