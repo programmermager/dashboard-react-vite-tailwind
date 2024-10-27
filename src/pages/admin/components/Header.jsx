@@ -8,6 +8,7 @@ import Modal from "../../../components/modal/ModalDialog";
 import { ChangePassword } from "../user/components/ChangePassword";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
+import { Menu } from "lucide-react";
 
 export const SidebarContext = createContext(false);
 
@@ -58,15 +59,13 @@ export const Header = ({ sidebarOpen, toggleSidebar }) => {
   return (
     <div>
       <header className="fixed left-0 right-0 top-0 z-50 flex h-16 items-center justify-between border-b bg-white px-4">
-        <div className="flex items-center">
-          <Logo
-            onClick={() => {
-              toggleSidebar(!sidebarOpen);
-            }}
-          />
-          <h1 className="hidden text-xl font-bold text-primary lg:block">
-            Wakanda Forever
-          </h1>
+        <Menu
+          onClick={() => toggleSidebar(!sidebarOpen)}
+          className="block lg:hidden"
+        />
+        <div className="invisible flex items-center lg:visible">
+          <Logo />
+          <h1 className="text-xl font-bold text-primary">Wakanda Forever</h1>
         </div>
 
         <div className="relative inline-block text-left">
